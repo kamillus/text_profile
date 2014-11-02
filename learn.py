@@ -70,7 +70,7 @@ class Classification(CursesMixin):
         wordbook = WordBook()
         
         #iterate over every word in the dictionary forever until the user enters nothing
-        for word in wordbook.generate_words(train=True):
+        for word in wordbook.generate_words(train=False):
             stdscr.addstr(0,0, "%s" % (" " * 100))
             stdscr.addstr(0,0, "-> %s " % (word))
             stdscr.refresh()
@@ -82,7 +82,7 @@ class Classification(CursesMixin):
             data_point = DataPoint(time=end-start, error_count=count, distance=Levenshtein.distance(word, user_word))
             break
             
-        classifier = svm.SVC(gamma=0.001)
+        classifier = svm.SVC(gamma=1)
         (features, targets) = profiles.get_classifier_data()
         
         classifier.fit(features, targets)
