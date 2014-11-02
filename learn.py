@@ -33,8 +33,8 @@ class Learn(CursesMixin):
     def __init__(self, stdscr):
         wordbook = WordBook()
         stdscr.addstr("What is your name?")
-        profile_data = ProfileData()
         profiles = Profiles()
+        profile_data = ProfileData()
         stdscr.refresh()
         name = stdscr.getstr(1,0, 15)
         profile_data.set_name(name)
@@ -59,7 +59,7 @@ class Learn(CursesMixin):
             #count of errors user made while typing, and how long the process took 
             data_point = DataPoint(time=end-start, error_count=count, distance=Levenshtein.distance(word, user_word))
             profile_data.append_point(data_point)
-            profiles.flush()
+        profiles.flush()
             
 class Classification(CursesMixin):
     def __init__(self, stdscr):
@@ -87,6 +87,6 @@ class Classification(CursesMixin):
         
         classifier.fit(features, targets)
         predicted = classifier.predict([[data_point.time, data_point.error_count, data_point.distance]])
-        print "\nYou're probably.. %s " % predicted
+        print "\nYou're probably.. %s " % predicted[0]
         
             

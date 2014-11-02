@@ -1,20 +1,19 @@
 import json
 
 class Profiles(object):
-    profiles = {}
-    
     def __init__(self):
+        self.profiles = {}
         self.load_data()
+
     
     def load_data(self):
         try:
             data = json.loads(open('data', 'r').read())
             for key, datum in data.iteritems():
-                profile_data = ProfileData()
-                profile_data.set_name(key)
+                self.profiles[key] = ProfileData()
+                self.profiles[key].set_name(key)
                 for point in datum:
-                    profile_data.append_point(DataPoint(point["time"], point["error_count"], point["distance"]))
-                self.profiles[key] = profile_data
+                    self.profiles[key].append_point(DataPoint(point["time"], point["error_count"], point["distance"]))
         except Exception as e:
              print e
     
@@ -26,8 +25,8 @@ class Profiles(object):
         output = {}
         
         for key, profile in self.profiles.iteritems():
-            output[key] = []
-            for point in profile.data_points:
+            output[profile.name] = []
+            for point in profile.get_points():
                 output[profile.name].append({"time": point.time, 
                     "error_count": point.error_count, 
                     "distance": point.distance,
@@ -50,14 +49,17 @@ class Profiles(object):
 
 #user profile class used to store the datapoints of the user
 class ProfileData(object):
-    data_points = []
-    name = ""
-        
+    def __init__(self):
+        self.data_points = []
+
     def set_name(self, name):
         self.name = name
         
     def append_point(self, point):
         self.data_points.append(point)
+
+    def get_points(self):
+        return self.data_points
 
         
 class DataPoint(object):
