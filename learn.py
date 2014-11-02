@@ -63,6 +63,7 @@ class Learn(CursesMixin):
             
 class Classification(CursesMixin):
     def __init__(self, stdscr):
+        profiles = Profiles()
         profile_data = ProfileData()
         stdscr.refresh()
         stdscr.clear()
@@ -78,14 +79,13 @@ class Classification(CursesMixin):
             end = time.time()
     
             stdscr.addstr(3, 0, "Time taken: %i, times_corrected: %i" % (end-start, count))
-    
-            if user_word == "":
-                break
-
             data_point = DataPoint(time=end-start, error_count=count, distance=Levenshtein.distance(word, user_word))
-            profile_data.append_point(data_point)
+            break
             
         classifier = svm.SVC(gamma=0.001)
+        (features, targets) = profiles.get_classifier_data()
+        
+        classifier.fit(features, targets)
         predicted = classifier.predict(profile_data.get_classifier_data())
         print "You're probably.. %s " % predicted
         

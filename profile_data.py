@@ -34,6 +34,18 @@ class Profiles(object):
                 })
         
         f.write(json.dumps(output))
+        
+    def get_classifier_data(self):
+        points = []
+        targets = []
+        
+        for key, profile in self.profiles.iteritems():
+            for point in profile.data_points:
+                points.append([point.time, point.error_count, point.distance])
+                targets.append(profile.name)
+                
+        return (points, targets)
+            
 
 
 #user profile class used to store the datapoints of the user
@@ -46,12 +58,6 @@ class ProfileData(object):
         
     def append_point(self, point):
         self.data_points.append(point)
-        
-    def get_classifier_data(self):
-        points = []
-        for point in self.data_points:
-            #append the features
-            points.append([point.time, point.error_count, point.distance])
 
         
 class DataPoint(object):
