@@ -1,5 +1,8 @@
 import json
 
+'''
+Class to manage user profiles. Keeps track of existing profiles and writes new profiles to the file system.
+'''
 class Profiles(object):
     def __init__(self):
         self.profiles = {}
@@ -19,7 +22,8 @@ class Profiles(object):
     
     def append_profile(self, profile):
         self.profiles[profile.name] = profile
-                
+      
+    #write all the profile data to disk
     def flush(self):
         f = open('data', 'w')
         output = {}
@@ -33,7 +37,8 @@ class Profiles(object):
                 })
         
         f.write(json.dumps(output))
-        
+    
+    #format data for the classifier input    
     def get_classifier_data(self):
         points = []
         targets = []
@@ -61,7 +66,7 @@ class ProfileData(object):
     def get_points(self):
         return self.data_points
 
-        
+#stores the features needed for classification        
 class DataPoint(object):
     def __init__(self, time=0, error_count=0, distance=0):
         self.time = time

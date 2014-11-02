@@ -1,5 +1,8 @@
 import random
 
+'''
+Helper class to aid in getting dictionary terms from dict/words. Works only on Linux based os's for now
+'''
 class WordBook(object):
     def __init__(self):
         pass

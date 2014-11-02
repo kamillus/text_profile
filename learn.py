@@ -5,7 +5,9 @@ import time
 import curses
 from sklearn import svm
 
-
+'''
+Input helper object for curses
+'''
 class CursesMixin(object):
     #function used to read the characters from the command line using ncurses
     def read_char(self, stdscr):
@@ -29,6 +31,9 @@ class CursesMixin(object):
             
         return (backspace_count, word)
 
+'''
+This is where all the learning magic happens.
+'''
 class Learn(CursesMixin):
     def __init__(self, stdscr):
         wordbook = WordBook()
@@ -60,7 +65,9 @@ class Learn(CursesMixin):
             data_point = DataPoint(time=end-start, error_count=count, distance=Levenshtein.distance(word, user_word))
             profile_data.append_point(data_point)
         profiles.flush()
-            
+'''
+This is where the svm is taught and performs classification based on a single word typed by the user
+'''            
 class Classification(CursesMixin):
     def __init__(self, stdscr):
         profiles = Profiles()
