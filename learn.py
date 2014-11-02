@@ -3,6 +3,7 @@ from word_book import WordBook
 import Levenshtein
 import time
 import curses
+from sklearn import svm
 
 
 class CursesMixin(object):
@@ -34,10 +35,10 @@ class Learn(CursesMixin):
         stdscr.addstr("What is your name?")
         profile_data = ProfileData()
         profiles = Profiles()
-        profiles.append_profile(ProfileData)
         stdscr.refresh()
         name = stdscr.getstr(1,0, 15)
         profile_data.set_name(name)
+        profiles.append_profile(profile_data)
         stdscr.clear()
         
         #iterate over every word in the dictionary forever until the user enters nothing
@@ -59,3 +60,33 @@ class Learn(CursesMixin):
             data_point = DataPoint(time=end-start, error_count=count, distance=Levenshtein.distance(word, user_word))
             profile_data.append_point(data_point)
             profiles.flush()
+            
+class Classification(CursesMixin):
+    def __init__(self, stdscr):
+        profile_data = ProfileData()
+        stdscr.refresh()
+        stdscr.clear()
+        wordbook = WordBook()
+        
+        #iterate over every word in the dictionary forever until the user enters nothing
+        for word in wordbook.generate_words(train=True):
+            stdscr.addstr(0,0, "%s" % (" " * 100))
+            stdscr.addstr(0,0, "-> %s " % (word))
+            stdscr.refresh()
+            start = time.time()
+            count, user_word = self.read_char(stdscr)
+            end = time.time()
+    
+            stdscr.addstr(3, 0, "Time taken: %i, times_corrected: %i" % (end-start, count))
+    
+            if user_word == "":
+                break
+
+            data_point = DataPoint(time=end-start, error_count=count, distance=Levenshtein.distance(word, user_word))
+            profile_data.append_point(data_point)
+            
+        classifier = svm.SVC(gamma=0.001)
+        predicted = classifier.predict(profile_data.get_classifier_data())
+        print "You're probably.. %s " % predicted
+        
+            

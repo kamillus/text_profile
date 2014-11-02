@@ -26,7 +26,7 @@ class Profiles(object):
         output = {}
         
         for key, profile in self.profiles.iteritems():
-            output[profile.name] = []
+            output[key] = []
             for point in profile.data_points:
                 output[profile.name].append({"time": point.time, 
                     "error_count": point.error_count, 
@@ -45,7 +45,13 @@ class ProfileData(object):
         self.name = name
         
     def append_point(self, point):
-        self.data_points.append(point)      
+        self.data_points.append(point)
+        
+    def get_classifier_data(self):
+        points = []
+        for point in self.data_points:
+            #append the features
+            points.append([point.time, point.error_count, point.distance])
 
         
 class DataPoint(object):
