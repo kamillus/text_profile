@@ -24,7 +24,7 @@ The game will ask you for your name, and then will print out words that you have
 
 Once you feel you've entered enough words, just leave a word blank and press enter. Repeat for multiple users (You need at least 2 to classify properly)
 
-Classifiying
+Classifying
 ----
 
 Once you've gone through the learning step, the svm can now guess who's typing at the command line. Run the following to guess the user:
