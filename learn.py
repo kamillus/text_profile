@@ -86,7 +86,7 @@ class Classification(CursesMixin):
         (features, targets) = profiles.get_classifier_data()
         
         classifier.fit(features, targets)
-        predicted = classifier.predict(profile_data.get_classifier_data())
-        print "You're probably.. %s " % predicted
+        predicted = classifier.predict([[data_point.time, data_point.error_count, data_point.distance]])
+        print "\nYou're probably.. %s " % predicted
         
             
